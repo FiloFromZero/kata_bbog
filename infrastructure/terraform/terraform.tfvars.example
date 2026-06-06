@@ -1,0 +1,9 @@
+aws_region     = "us-east-1"
+instance_type  = "t2.micro"
+key_pair_name  = "my-aws-key-pair"
+my_ip          = "192.168.1.1/32" # Replace with your public IP in CIDR format (e.g., 203.0.113.50/32) to allow SSH access
+db_user        = "prod_user"
+db_password    = "ChangeMe123!" # Replace with a strong database password
+jwt_secret     = "my-super-secret-key-that-is-at-least-256-bits-long-change-me"
+basic_user     = "admin-prod"
+basic_password = "prod-password-123"

@@ -1,0 +1,30 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: customers-prod
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:5432/customers_prod
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+logging:
+  level:
+    com.customers.kata_bbog: WARN
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 1800000  # 30 minutes
+  basic:
+    username: ${BASIC_USER}
+    password: ${BASIC_PASSWORD}
+
+app:
+  environment-message: "🔴 Ejecutando en PROD"

@@ -1,0 +1,77 @@
+version: '3.9'
+services:
+  # --- Base de datos DEV ---
+  postgres-dev:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: customers_dev
+      POSTGRES_USER: ${POSTGRES_USER_DEV}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_DEV}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER_DEV} -d customers_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata-dev:/var/lib/postgresql/data
+
+  # --- Base de datos PROD ---
+  postgres-prod:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: customers_prod
+      POSTGRES_USER: ${POSTGRES_USER_PROD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_PROD}
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER_PROD} -d customers_prod"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata-prod:/var/lib/postgresql/data
+
+  # --- App DEV ---
+  app-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_HOST=postgres-dev
+      - DB_USER=${POSTGRES_USER_DEV}
+      - DB_PASSWORD=${POSTGRES_PASSWORD_DEV}
+      - JWT_SECRET=${JWT_SECRET_DEV}
+      - BASIC_USER=${BASIC_USER_DEV}
+      - BASIC_PASSWORD=${BASIC_PASSWORD_DEV}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres-dev:
+        condition: service_healthy
+
+  # --- App PROD ---
+  app-prod:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_HOST=postgres-prod
+      - DB_USER=${POSTGRES_USER_PROD}
+      - DB_PASSWORD=${POSTGRES_PASSWORD_PROD}
+      - JWT_SECRET=${JWT_SECRET_PROD}
+      - BASIC_USER=${BASIC_USER_PROD}
+      - BASIC_PASSWORD=${BASIC_PASSWORD_PROD}
+    ports:
+      - "9090:9090"
+    depends_on:
+      postgres-prod:
+        condition: service_healthy
+
+volumes:
+  pgdata-dev:
+  pgdata-prod:

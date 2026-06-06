@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: kata_bbog
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-key-minimum-256-bits-long-for-hs256-testing-purposes-only-12345}
+    expiration: 3600000
+  basic:
+    username: ${BASIC_USER:admin-dev}
+    password: ${BASIC_PASSWORD:dev-password-123}
+
+app:
+  environment-message: "⚪ Ejecutando con perfil DEFAULT"

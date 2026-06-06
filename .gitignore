@@ -15,7 +15,10 @@
 .env
 .env.*
 
-# Terraform state
+# Terraform state and vars
 .terraform/
 *.tfstate
 *.tfstate.backup
+*.tfvars
+*tfplan
+
