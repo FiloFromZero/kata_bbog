@@ -1,6 +1,7 @@
 package com.customers.kata_bbog.infrastructure.adapter.in.web;
 
 import com.customers.kata_bbog.domain.exception.CustomerAlreadyExistsException;
+import com.customers.kata_bbog.domain.exception.CustomerNotFoundException;
 import com.customers.kata_bbog.domain.exception.InvalidCustomerDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -34,6 +35,17 @@ public class GlobalExceptionHandler {
             ex.getMessage()
         );
         problem.setTitle("Datos de cliente inválidos");
+        problem.setProperty("timestamp", Instant.now());
+        return problem;
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ProblemDetail handleCustomerNotFound(CustomerNotFoundException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_FOUND,
+            ex.getMessage()
+        );
+        problem.setTitle("Cliente no encontrado");
         problem.setProperty("timestamp", Instant.now());
         return problem;
     }

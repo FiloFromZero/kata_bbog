@@ -5,6 +5,8 @@ import com.customers.kata_bbog.domain.port.out.CustomerRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Adaptador de persistencia (Driven / Lado derecho).
@@ -37,5 +39,16 @@ public class CustomerPersistenceAdapter implements CustomerRepository {
     @Override
     public boolean existsByEmail(String email) {
         return jpaRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Optional<Customer> findById(String id) {
+        return jpaRepository.findById(UUID.fromString(id))
+            .map(CustomerMapper::toDomain);
+    }
+
+    @Override
+    public void deleteById(String id) {
+        jpaRepository.deleteById(UUID.fromString(id));
     }
 }

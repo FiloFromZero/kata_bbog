@@ -3,6 +3,7 @@ package com.customers.kata_bbog.domain.port.out;
 import com.customers.kata_bbog.domain.model.Customer;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Puerto de salida (Driven Port).
@@ -16,4 +17,8 @@ public interface CustomerRepository {
     List<Customer> findAll();
 
     boolean existsByEmail(String email);
+
+    Optional<Customer> findById(String id);
+
+    void deleteById(String id);
 }

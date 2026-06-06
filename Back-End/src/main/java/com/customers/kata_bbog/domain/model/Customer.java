@@ -47,6 +47,18 @@ public final class Customer {
         );
     }
 
+    /**
+     * Devuelve un nuevo Customer con los detalles actualizados.
+     */
+    public Customer updateDetails(String newName, String newEmail) {
+        return new Customer(
+            this.id,
+            CustomerName.of(newName),
+            CustomerEmail.of(newEmail),
+            this.createdAt
+        );
+    }
+
     public CustomerId getId() {
         return id;
     }
