@@ -1,0 +1,21 @@
+# Maven Build Artifacts
+**/target/
+**/*.jar
+**/*.war
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Environment variables
+.env
+.env.*
+
+# Terraform state
+.terraform/
+*.tfstate
+*.tfstate.backup
