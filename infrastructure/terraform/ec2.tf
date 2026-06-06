@@ -35,7 +35,7 @@ resource "aws_instance" "app_server" {
 
 # IAM Role for EC2 to access S3
 resource "aws_iam_role" "ec2_s3_role" {
-  name = "kata-cloud-ec2-s3-role"
+  name = "kata-cloud-ec2-s3-role-${random_id.bucket_suffix.hex}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -53,7 +53,7 @@ resource "aws_iam_role" "ec2_s3_role" {
 
 # IAM Policy for S3 read access
 resource "aws_iam_policy" "s3_read_policy" {
-  name        = "kata-cloud-s3-read-policy"
+  name        = "kata-cloud-s3-read-policy-${random_id.bucket_suffix.hex}"
   description = "Allow EC2 to read artifacts from S3"
 
   policy = jsonencode({
@@ -80,6 +80,6 @@ resource "aws_iam_role_policy_attachment" "ec2_s3_attachment" {
 }
 
 resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "kata-cloud-ec2-instance-profile"
+  name = "kata-cloud-ec2-instance-profile-${random_id.bucket_suffix.hex}"
   role = aws_iam_role.ec2_s3_role.name
 }

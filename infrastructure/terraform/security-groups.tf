@@ -1,5 +1,5 @@
 resource "aws_security_group" "app_sg" {
-  name        = "kata-cloud-sg"
+  name        = "kata-cloud-sg-${random_id.bucket_suffix.hex}"
   description = "Security group for kata cloud application"
 
   # SSH
