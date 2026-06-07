@@ -11,13 +11,22 @@ dnf install -y docker
 systemctl start docker
 systemctl enable docker
 
+# Configure dynamic port and database name based on the active profile
+if [ "${spring_profile}" = "dev" ]; then
+  PORT=8080
+  DB_NAME="customers_dev"
+else
+  PORT=9090
+  DB_NAME="customers_prod"
+fi
+
 # Run PostgreSQL in Docker
 # Expose port 5432 and configure credentials
 docker run -d \
-  --name postgres-prod \
+  --name "postgres-${spring_profile}" \
   --restart always \
   -p 5432:5432 \
-  -e POSTGRES_DB=customers_prod \
+  -e POSTGRES_DB="${DB_NAME}" \
   -e POSTGRES_USER="${db_user}" \
   -e POSTGRES_PASSWORD="${db_password}" \
   postgres:16-alpine
@@ -31,11 +40,11 @@ cd /opt/app
 aws s3 cp s3://${s3_bucket}/app.jar /opt/app/app.jar
 
 # Run the Spring Boot App
-# Configure active profile to 'prod', set host database, port, and security variables
+# Configure active profile, set host database, port, and security variables
 java -jar /opt/app/app.jar \
-  --spring.profiles.active=prod \
-  --server.port=9090 \
-  --spring.datasource.url=jdbc:postgresql://localhost:5432/customers_prod \
+  --spring.profiles.active="${spring_profile}" \
+  --server.port="${PORT}" \
+  --spring.datasource.url="jdbc:postgresql://localhost:5432/${DB_NAME}" \
   --spring.datasource.username="${db_user}" \
   --spring.datasource.password="${db_password}" \
   --security.jwt.secret="${jwt_secret}" \

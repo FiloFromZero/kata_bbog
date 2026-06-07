@@ -2,7 +2,7 @@ name: CD Pipeline - Deploy to AWS
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   build-and-deploy:
@@ -39,22 +39,32 @@ jobs:
         run: terraform init
         working-directory: infrastructure/terraform
 
-      - name: Terraform Plan
+      # Deploy to DEV environment when pushing to develop branch
+      - name: Terraform Apply (DEV)
+        if: github.ref == 'refs/heads/develop'
         env:
-          TF_VAR_key_pair_name: ${{ secrets.KEY_PAIR_NAME }}
-          TF_VAR_my_ip: ${{ secrets.MY_IP }}
-          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-          TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
-          TF_VAR_basic_password: ${{ secrets.BASIC_PASSWORD }}
-        run: terraform plan -out=tfplan
+          TF_VAR_key_pair_name: ${{ secrets.DEV_KEY_PAIR_NAME || secrets.KEY_PAIR_NAME }}
+          TF_VAR_my_ip: ${{ secrets.DEV_MY_IP || secrets.MY_IP }}
+          TF_VAR_db_user: ${{ secrets.POSTGRES_USER_DEV }}
+          TF_VAR_db_password: ${{ secrets.POSTGRES_PASSWORD_DEV }}
+          TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET_DEV }}
+          TF_VAR_basic_user: ${{ secrets.BASIC_USER_DEV }}
+          TF_VAR_basic_password: ${{ secrets.BASIC_PASSWORD_DEV }}
+        run: |
+          terraform plan -var-file="dev.tfvars" -var="spring_profile=dev" -out=tfplan
+          terraform apply -auto-approve tfplan
         working-directory: infrastructure/terraform
 
-      - name: Terraform Apply
+      # Deploy to PROD environment when pushing to main branch
+      - name: Terraform Apply (PROD)
+        if: github.ref == 'refs/heads/main'
         env:
           TF_VAR_key_pair_name: ${{ secrets.KEY_PAIR_NAME }}
           TF_VAR_my_ip: ${{ secrets.MY_IP }}
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
           TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
           TF_VAR_basic_password: ${{ secrets.BASIC_PASSWORD }}
-        run: terraform apply -auto-approve tfplan
+        run: |
+          terraform plan -var="spring_profile=prod" -out=tfplan
+          terraform apply -auto-approve tfplan
         working-directory: infrastructure/terraform
