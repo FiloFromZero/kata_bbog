@@ -14,6 +14,7 @@ resource "aws_instance" "app_server" {
   key_name               = var.key_pair_name
   vpc_security_group_ids = [aws_security_group.app_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
+  user_data_replace_on_change = true
 
   user_data = templatefile("${path.module}/user-data.sh", {
     s3_bucket      = aws_s3_bucket.artifacts.id
