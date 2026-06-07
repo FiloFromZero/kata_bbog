@@ -49,3 +49,9 @@ variable "basic_password" {
   sensitive   = true
   description = "Basic auth password for /auth/login"
 }
+
+variable "spring_profile" {
+  type        = string
+  default     = "prod"
+  description = "Spring profile active (dev or prod)"
+}

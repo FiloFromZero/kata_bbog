@@ -22,6 +22,7 @@ resource "aws_instance" "app_server" {
     jwt_secret     = var.jwt_secret
     basic_user     = var.basic_user
     basic_password = var.basic_password
+    spring_profile = var.spring_profile
   })
 
   # Ensure the jar is uploaded before creating the instance so user-data doesn't fail
