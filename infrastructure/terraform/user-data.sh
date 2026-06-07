@@ -1,6 +1,5 @@
 #!/bin/bash
 # user-data.sh
-# JAR Version: ${jar_version}
 # Update system
 dnf update -y
 

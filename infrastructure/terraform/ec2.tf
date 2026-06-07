@@ -27,11 +27,16 @@ resource "aws_instance" "app_server" {
     app_port          = var.app_port
     duckdns_subdomain = var.duckdns_subdomain
     duckdns_token     = var.duckdns_token
-    jar_version       = aws_s3_object.app_jar.etag
   })
 
   # Ensure the jar is uploaded before creating the instance so user-data doesn't fail
   depends_on = [aws_s3_object.app_jar]
+
+  lifecycle {
+    replace_triggered_by = [
+      aws_s3_object.app_jar
+    ]
+  }
 
   tags = {
     Name        = "kata-cloud-customers"
