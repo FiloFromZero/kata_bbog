@@ -20,5 +20,6 @@
 *.tfstate
 *.tfstate.backup
 *.tfvars
+!**/dev.tfvars
 *tfplan
 
