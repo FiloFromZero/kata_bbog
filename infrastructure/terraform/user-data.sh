@@ -26,7 +26,7 @@ docker run -d \
   --name "postgres-${spring_profile}" \
   --restart always \
   -p 5432:5432 \
-  -e POSTGRES_DB="${DB_NAME}" \
+  -e POSTGRES_DB="$${DB_NAME}" \
   -e POSTGRES_USER="${db_user}" \
   -e POSTGRES_PASSWORD="${db_password}" \
   postgres:16-alpine
@@ -43,8 +43,8 @@ aws s3 cp s3://${s3_bucket}/app.jar /opt/app/app.jar
 # Configure active profile, set host database, port, and security variables
 java -jar /opt/app/app.jar \
   --spring.profiles.active="${spring_profile}" \
-  --server.port="${PORT}" \
-  --spring.datasource.url="jdbc:postgresql://localhost:5432/${DB_NAME}" \
+  --server.port="$${PORT}" \
+  --spring.datasource.url="jdbc:postgresql://localhost:5432/$${DB_NAME}" \
   --spring.datasource.username="${db_user}" \
   --spring.datasource.password="${db_password}" \
   --security.jwt.secret="${jwt_secret}" \
