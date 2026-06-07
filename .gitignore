@@ -23,3 +23,7 @@
 !**/dev.tfvars
 *tfplan
 
+# Front-End (Angular)
+Front-End/node_modules/
+Front-End/dist/
+Front-End/.angular/

@@ -81,3 +81,43 @@ jobs:
           terraform plan -var="spring_profile=prod" -out=tfplan
           terraform apply -auto-approve tfplan
         working-directory: infrastructure/terraform
+
+      # ─────────────────────────────────────────────
+      # FRONT-END: Build & Deploy
+      # ─────────────────────────────────────────────
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: Front-End/package-lock.json
+
+      - name: Install Front-End dependencies
+        run: npm ci
+        working-directory: Front-End
+
+      - name: Build Front-End (DEV)
+        if: github.ref == 'refs/heads/develop'
+        run: npm run build -- --configuration=development
+        working-directory: Front-End
+
+      - name: Build Front-End (PROD)
+        if: github.ref == 'refs/heads/main'
+        run: npm run build
+        working-directory: Front-End
+
+      - name: Deploy Front-End to S3
+        run: |
+          FRONTEND_BUCKET=$(terraform output -raw frontend_bucket_name)
+          FRONTEND_URL=$(terraform output -raw frontend_url)
+          aws s3 sync ../../Front-End/dist/Front-End/browser \
+            s3://$FRONTEND_BUCKET \
+            --delete \
+            --cache-control "max-age=31536000,immutable"
+          # index.html should not be cached
+          aws s3 cp ../../Front-End/dist/Front-End/browser/index.html \
+            s3://$FRONTEND_BUCKET/index.html \
+            --cache-control "no-cache,no-store,must-revalidate"
+          echo "✅ Front-End deployed: $FRONTEND_URL"
+        working-directory: infrastructure/terraform
