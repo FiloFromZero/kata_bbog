@@ -1,0 +1,93 @@
+<div class="login-container">
+  <div class="bg-circle circle-1"></div>
+  <div class="bg-circle circle-2"></div>
+  
+  <div class="login-card anim-scale-in" [class.anim-shake]="hasError()">
+    <!-- Environment badge -->
+    <div class="env-badge" [style.backgroundColor]="env.envColor" [style.color]="env.envTextColor" style="border: 1px solid rgba(0, 0, 0, 0.05);">
+      {{ env.envLabel }}
+    </div>
+
+    <!-- Logo and Header -->
+    <div class="logo-header">
+      <div class="logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+      <h2>Gestión de Clientes</h2>
+      <p>Kata Banco de Bogotá</p>
+    </div>
+
+    <!-- Error Alert -->
+    @if (hasError()) {
+      <div class="login-error-alert anim-fade-up">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+
+    <!-- Form -->
+    <form (submit)="onSubmit($event)">
+      <div class="form-group">
+        <label class="form-label" for="username">Usuario / Email</label>
+        <div class="input-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input 
+            type="text" 
+            id="username" 
+            name="username"
+            class="form-input" 
+            placeholder="Ingrese su usuario" 
+            [ngModel]="username()"
+            (ngModelChange)="username.set($event)"
+            required
+            autocomplete="username"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Contraseña</label>
+        <div class="input-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <input 
+            type="password" 
+            id="password" 
+            name="password"
+            class="form-input" 
+            placeholder="••••••••" 
+            [ngModel]="password()"
+            (ngModelChange)="password.set($event)"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-primary" 
+        [disabled]="isLoading() || !username() || password().length < 4"
+        style="width: 100%; margin-top: var(--spacing-md);"
+      >
+        @if (isLoading()) {
+          <div class="spinner"></div>
+        } @else {
+          <span>Ingresar</span>
+        }
+      </button>
+    </form>
+  </div>
+</div>
