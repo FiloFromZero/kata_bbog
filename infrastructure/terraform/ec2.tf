@@ -17,14 +17,16 @@ resource "aws_instance" "app_server" {
   user_data_replace_on_change = true
 
   user_data = templatefile("${path.module}/user-data.sh", {
-    s3_bucket      = aws_s3_bucket.artifacts.id
-    db_user        = var.db_user
-    db_password    = var.db_password
-    jwt_secret     = var.jwt_secret
-    basic_user     = var.basic_user
-    basic_password = var.basic_password
-    spring_profile = var.spring_profile
-    app_port       = var.app_port
+    s3_bucket         = aws_s3_bucket.artifacts.id
+    db_user           = var.db_user
+    db_password       = var.db_password
+    jwt_secret        = var.jwt_secret
+    basic_user        = var.basic_user
+    basic_password    = var.basic_password
+    spring_profile    = var.spring_profile
+    app_port          = var.app_port
+    duckdns_subdomain = var.duckdns_subdomain
+    duckdns_token     = var.duckdns_token
   })
 
   # Ensure the jar is uploaded before creating the instance so user-data doesn't fail

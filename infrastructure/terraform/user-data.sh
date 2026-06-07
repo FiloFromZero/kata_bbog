@@ -11,6 +11,9 @@ dnf install -y docker
 systemctl start docker
 systemctl enable docker
 
+# Update DuckDNS domain with current public IP
+curl -s "https://www.duckdns.org/update?domains=${duckdns_subdomain}&token=${duckdns_token}&ip="
+
 # Configure dynamic port and database name based on the active profile
 PORT=${app_port}
 if [ "${spring_profile}" = "dev" ]; then

@@ -61,4 +61,16 @@ variable "app_port" {
   default     = 9090
   description = "Port on which the Spring Boot application runs"
 }
+variable "duckdns_subdomain" {
+  type        = string
+  default     = "kata-bbog-prod-mateo"
+  description = "El subdominio de DuckDNS para este ambiente"
+}
+
+variable "duckdns_token" {
+  type        = string
+  sensitive   = true
+  description = "El token secreto de DuckDNS"
+}
+
 

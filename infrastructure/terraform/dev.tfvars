@@ -4,3 +4,4 @@
 aws_region    = "us-east-1"
 instance_type = "t3.micro"
 app_port      = 8080
+duckdns_subdomain = "kata-bbog-dev-mateo"
