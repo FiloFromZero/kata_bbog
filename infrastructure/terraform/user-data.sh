@@ -12,11 +12,10 @@ systemctl start docker
 systemctl enable docker
 
 # Configure dynamic port and database name based on the active profile
+PORT=${app_port}
 if [ "${spring_profile}" = "dev" ]; then
-  PORT=8080
   DB_NAME="customers_dev"
 else
-  PORT=9090
   DB_NAME="customers_prod"
 fi
 

@@ -55,3 +55,10 @@ variable "spring_profile" {
   default     = "prod"
   description = "Spring profile active (dev or prod)"
 }
+
+variable "app_port" {
+  type        = number
+  default     = 9090
+  description = "Port on which the Spring Boot application runs"
+}
+

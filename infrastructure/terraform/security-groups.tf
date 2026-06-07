@@ -11,13 +11,13 @@ resource "aws_security_group" "app_sg" {
     description = "Allow SSH from my IP"
   }
 
-  # App PROD port
+  # App port
   ingress {
-    from_port   = 9090
-    to_port     = 9090
+    from_port   = var.app_port
+    to_port     = var.app_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow access to the Spring Boot App (PROD)"
+    description = "Allow access to the Spring Boot App"
   }
 
   # Egress

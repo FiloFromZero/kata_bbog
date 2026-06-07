@@ -14,6 +14,6 @@ output "s3_bucket_name" {
 }
 
 output "app_url" {
-  value       = "http://${aws_instance.app_server.public_ip}:9090"
+  value       = "http://${aws_instance.app_server.public_ip}:${var.app_port}"
   description = "URL of the deployed Spring Boot application"
 }
