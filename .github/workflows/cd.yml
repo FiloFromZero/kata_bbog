@@ -36,7 +36,18 @@ jobs:
           aws-region: us-east-1
 
       - name: Terraform Init
-        run: terraform init
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/develop" ]; then
+            terraform init \
+              -backend-config="bucket=kata-cloud-tfstate-mateo" \
+              -backend-config="key=dev/terraform.tfstate" \
+              -backend-config="region=us-east-1"
+          else
+            terraform init \
+              -backend-config="bucket=kata-cloud-tfstate-mateo" \
+              -backend-config="key=prod/terraform.tfstate" \
+              -backend-config="region=us-east-1"
+          fi
         working-directory: infrastructure/terraform
 
       # Deploy to DEV environment when pushing to develop branch
