@@ -33,7 +33,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
             "http://localhost:4200",
             "http://kata-bbog-dev-mateo.duckdns.org:8080",
-            "http://kata-bbog-prod-mateo.duckdns.org:9090"
+            "http://kata-bbog-prod-mateo.duckdns.org:9090",
+            "http://kata-cloud-frontend-dev-b7bd1e69.s3-website-us-east-1.amazonaws.com"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cache-Control"));
